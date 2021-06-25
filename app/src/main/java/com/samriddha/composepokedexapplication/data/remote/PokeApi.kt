@@ -1,7 +1,7 @@
 package com.samriddha.composepokedexapplication.data.remote
 
-import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetails.PokemonData
-import com.samriddha.composepokedexapplication.data.remote.response.pokemonList.PokemonList
+import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetailsModels.PokemonData
+import com.samriddha.composepokedexapplication.data.remote.response.pokemonListModels.PokemonList
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

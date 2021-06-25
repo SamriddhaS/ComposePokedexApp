@@ -1,8 +1,8 @@
 package com.samriddha.composepokedexapplication.data.repository
 
 import com.samriddha.composepokedexapplication.data.remote.PokeApi
-import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetails.PokemonData
-import com.samriddha.composepokedexapplication.data.remote.response.pokemonList.PokemonList
+import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetailsModels.PokemonData
+import com.samriddha.composepokedexapplication.data.remote.response.pokemonListModels.PokemonList
 import com.samriddha.composepokedexapplication.utils.Resource
 import dagger.hilt.android.scopes.ActivityScoped
 import java.lang.Exception
