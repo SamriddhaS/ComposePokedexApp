@@ -1,6 +1,9 @@
 package com.samriddha.composepokedexapplication.data.remote.response.pokemonDetails
 
+import com.google.gson.annotations.SerializedName
+
 data class Other(
     val dream_world: DreamWorld,
-    val official-artwork: OfficialArtwork
+    @SerializedName("official-artwork")
+    val officialArtwork: OfficialArtwork
 )
