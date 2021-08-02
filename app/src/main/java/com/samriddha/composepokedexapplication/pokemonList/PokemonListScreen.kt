@@ -163,6 +163,7 @@ fun PokemonList(
     navController: NavController,
     viewModel: PokemonListViewModel= hiltNavGraphViewModel()
 ){
+
     val pokemonList by remember{ viewModel.pokemonList }
     val endReached by remember{ viewModel.endReached }
     val isLoading by remember{ viewModel.isLoading }
