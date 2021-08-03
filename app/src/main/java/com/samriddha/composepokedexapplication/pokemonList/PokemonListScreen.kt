@@ -42,7 +42,10 @@ import com.samriddha.composepokedexapplication.ui.theme.RobotoCondensed
 import timber.log.Timber
 
 @Composable
-fun PokemonListScreen(navController: NavController){
+fun PokemonListScreen(
+    navController: NavController,
+    viewModel: PokemonListViewModel = hiltNavGraphViewModel()
+    ){
 
     Surface(
         color = MaterialTheme.colors.background,
@@ -66,6 +69,10 @@ fun PokemonListScreen(navController: NavController){
                     .fillMaxWidth()
                     .padding(28.dp)
             ){
+                /* This function is called
+                * whenever we type something in the edit text field
+                * */
+                viewModel.searchPokemonList(it)
 
             }
 
@@ -108,7 +115,7 @@ fun SearchBar(
                 .background(Color.White, CircleShape)
                 .padding(horizontal = 18.dp, vertical = 12.dp)
                 .onFocusChanged {
-                    isHintDisplayed = it != FocusState.Active
+                    isHintDisplayed = it != FocusState.Active && text.isEmpty()
                 }
             )
 
@@ -123,42 +130,6 @@ fun SearchBar(
 }
 
 @Composable
-fun PokemonListRow(
-    rowIndex:Int,
-    entries:List<PokemonListEntry>,
-    navController: NavController
-) {
-     Column {
-         Row {
-
-             /* 1st pokemon of the row*/
-             Timber.d(rowIndex.toString())
-             PokemonEntry(entry = entries[rowIndex * 2],
-                 navController = navController,
-                 modifier = Modifier.weight(1f)
-                 )
-
-             /*For space between two pokemon inside the same row.*/
-             Spacer(modifier = Modifier.width(18.dp))
-
-             /*2nd pokemon of the row*/
-             if (entries.size >= rowIndex*2+2){
-                 PokemonEntry(entry = entries[rowIndex * 2 + 1],
-                     navController = navController,
-                     modifier = Modifier.weight(1f)
-                 )
-             }else {
-                 Spacer(modifier = Modifier.weight(1f))
-             }
-
-         }
-     }
-
-    /*For spacing between 2 columns*/
-    Spacer(modifier = Modifier.height(18.dp))
-}
-
-@Composable
 fun PokemonList(
     navController: NavController,
     viewModel: PokemonListViewModel= hiltNavGraphViewModel()
@@ -168,6 +139,7 @@ fun PokemonList(
     val endReached by remember{ viewModel.endReached }
     val isLoading by remember{ viewModel.isLoading }
     val loadError by remember{ viewModel.loadError }
+    val isSearching by remember{ viewModel.isSearching }
 
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
 
@@ -185,7 +157,7 @@ fun PokemonList(
             /* check if user has scrolled to the bottom of the list so we
             * can load more items from view models.
             * */
-            if (it>=itemCount-1 && !endReached ) {
+            if (it>=itemCount-1 && !endReached && !isLoading && !isSearching) {
                 viewModel.loadPokemonPaginated()
             }
 
@@ -207,6 +179,42 @@ fun PokemonList(
             }
         }
     }
+}
+
+@Composable
+fun PokemonListRow(
+    rowIndex:Int,
+    entries:List<PokemonListEntry>,
+    navController: NavController
+) {
+    Column {
+        Row {
+
+            /* 1st pokemon of the row*/
+            Timber.d(rowIndex.toString())
+            PokemonEntry(entry = entries[rowIndex * 2],
+                navController = navController,
+                modifier = Modifier.weight(1f)
+            )
+
+            /*For space between two pokemon inside the same row.*/
+            Spacer(modifier = Modifier.width(18.dp))
+
+            /*2nd pokemon of the row*/
+            if (entries.size >= rowIndex*2+2){
+                PokemonEntry(entry = entries[rowIndex * 2 + 1],
+                    navController = navController,
+                    modifier = Modifier.weight(1f)
+                )
+            }else {
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+        }
+    }
+
+    /*For spacing between 2 columns*/
+    Spacer(modifier = Modifier.height(18.dp))
 }
 
 @Composable
