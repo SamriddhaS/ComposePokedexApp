@@ -1,9 +1,8 @@
-package com.samriddha.composepokedexapplication.pokemonList
+package com.samriddha.composepokedexapplication.ui.pokemon_list
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,6 @@ import com.samriddha.composepokedexapplication.data.repository.PokemonRepository
 import com.samriddha.composepokedexapplication.utils.Constants.PAGE_SIZE
 import com.samriddha.composepokedexapplication.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

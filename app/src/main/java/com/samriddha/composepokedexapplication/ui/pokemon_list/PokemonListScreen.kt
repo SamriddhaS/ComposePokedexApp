@@ -1,6 +1,5 @@
-package com.samriddha.composepokedexapplication.pokemonList
+package com.samriddha.composepokedexapplication.ui.pokemon_list
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +12,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -132,7 +130,7 @@ fun SearchBar(
 @Composable
 fun PokemonList(
     navController: NavController,
-    viewModel: PokemonListViewModel= hiltNavGraphViewModel()
+    viewModel: PokemonListViewModel = hiltNavGraphViewModel()
 ){
 
     val pokemonList by remember{ viewModel.pokemonList }
