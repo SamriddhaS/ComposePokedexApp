@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -69,7 +70,7 @@ fun PokemonListScreen(
                 .align(CenterHorizontally))
 
             //Search bar
-            SearchBar(
+            SearchBarWithTextField(
                 hint = "Search Pokemon...",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,6 +133,49 @@ fun SearchBar(
                 modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp)
                 )
         }
+
+
+    }
+}
+
+@Composable
+fun SearchBarWithTextField(
+    modifier: Modifier = Modifier,
+    hint:String="",
+    onSearch: (String)->Unit = {}
+){
+    var text by remember {
+        mutableStateOf("")
+    }
+
+    Box(modifier = modifier) {
+
+        /*This field will take the user input: Edit text*/
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(4.dp, RoundedCornerShape(8.dp))
+                .clip(AbsoluteRoundedCornerShape(18.dp))
+                ,
+            value = text,
+            placeholder = {
+                Text(text = hint,
+                    color = Color.LightGray)
+            },
+            onValueChange = {
+                text = it
+                onSearch(it)
+            },
+            maxLines = 1,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.White,
+                textColor = Color.Black,
+                cursorColor = Color.Black,
+                focusedIndicatorColor = Color.Green
+            )
+        )
+
     }
 }
 
