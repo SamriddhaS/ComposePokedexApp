@@ -1,5 +1,8 @@
 package com.samriddha.composepokedexapplication.ui.pokemon_list
 
+import android.graphics.Bitmap
+import android.util.Log
+import android.view.animation.Transformation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,22 +21,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.SemanticsProperties.Focused
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
+import coil.ImageLoader
+import coil.bitmap.BitmapPool
 import coil.request.ImageRequest
-import com.google.accompanist.coil.CoilImage
+import coil.size.Size
+import coil.util.CoilUtils
+import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.imageloading.LoadPainter
 import com.samriddha.composepokedexapplication.R
 import com.samriddha.composepokedexapplication.data.models.PokemonListEntry
 import com.samriddha.composepokedexapplication.ui.theme.RobotoCondensed
@@ -42,7 +50,7 @@ import timber.log.Timber
 @Composable
 fun PokemonListScreen(
     navController: NavController,
-    viewModel: PokemonListViewModel = hiltNavGraphViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel()
     ){
 
     Surface(
@@ -113,7 +121,7 @@ fun SearchBar(
                 .background(Color.White, CircleShape)
                 .padding(horizontal = 18.dp, vertical = 12.dp)
                 .onFocusChanged {
-                    isHintDisplayed = it != FocusState.Active && text.isEmpty()
+                    isHintDisplayed = it != Focused && text.isEmpty()
                 }
             )
 
@@ -130,7 +138,7 @@ fun SearchBar(
 @Composable
 fun PokemonList(
     navController: NavController,
-    viewModel: PokemonListViewModel = hiltNavGraphViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel()
 ){
 
     val pokemonList by remember{ viewModel.pokemonList }
@@ -220,7 +228,7 @@ fun PokemonEntry(
     entry:PokemonListEntry,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: PokemonListViewModel = hiltNavGraphViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel()
 ) {
     /*This color will be used as dominant color if
     * the dominant color is not processed yet.
@@ -254,7 +262,7 @@ fun PokemonEntry(
         Column {
 
             /*Show Pokemon Image */
-            CoilImage(request = ImageRequest.Builder(LocalContext.current)
+            /*CoilImage(request = ImageRequest.Builder(context = LocalContext.current)
                 .data(entry.imageUrl)
                 .target {
                     viewModel.getDominantColorFromDrawable(it){color->
@@ -268,14 +276,64 @@ fun PokemonEntry(
                 .size(120.dp)
                 .align(CenterHorizontally)) {
 
-                /*This is the coli image scope.
+                *//*This is the coli image scope.
                 * This section will be shown when the actual image is getting
-                * loaded from network.*/
+                * loaded from network.*//*
                 CircularProgressIndicator(
                     color = MaterialTheme.colors.primary,
                     modifier = Modifier.scale(0.5f)
                 )
-            }
+            }*/
+
+            val painter = rememberCoilPainter(request = ImageRequest.Builder(context = LocalContext.current)
+                .data(entry.imageUrl)
+                .placeholder(R.drawable.ic_international_pok_mon_logo)
+                .build(),
+                requestBuilder = {
+
+                    /*
+                    * this is a work around for getting the domninant color from the image.
+                    * As I could not find a way to get the drawable or bitmap from the painter resource
+                    * or form the Image.
+                    *
+                    * //////////////// Known Issue /////////////////
+                    * The problem with this approach is that the dominant color
+                    * loads fine for the first time when the image loads but
+                    * if the compose recomposes then the dominant color gets lost.
+                    * */
+                    transformations(
+                        object : coil.transform.Transformation{
+                            override fun key(): String {
+                                return entry.imageUrl
+                            }
+
+                            override suspend fun transform(
+                                pool: BitmapPool,
+                                input: Bitmap,
+                                size: Size
+                            ): Bitmap {
+
+                                if (dominantColor==defaultDominantColor){
+                                    viewModel.getDominantColorFromDrawable(input){
+                                        dominantColor=it
+                                    }
+                                }
+                                return input
+                            }
+                        }
+                    )
+                }
+            )
+
+            Image(painter = painter,
+                contentDescription = entry.pokemonName,
+                modifier = Modifier
+                    .size(120.dp)
+                    .align(CenterHorizontally)
+                )
+
+
+
 
             /*Show pokemon name*/
             Text(text = entry.pokemonName,

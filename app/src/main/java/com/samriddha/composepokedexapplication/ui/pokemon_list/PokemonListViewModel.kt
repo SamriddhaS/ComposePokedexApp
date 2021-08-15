@@ -99,13 +99,13 @@ constructor(
         }
     }
 
-    fun getDominantColorFromDrawable(drawable: Drawable, onFinish: (Color) -> Unit) {
-        val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888,true)
+    fun getDominantColorFromDrawable(drawable: Bitmap, onFinish: (Color) -> Unit) {
+        //val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888,true)
 
         /*Getting the dominant color from image
         * using the Pallet library.
         * */
-        Palette.from(bmp).generate {
+        Palette.from(drawable).generate {
             it?.dominantSwatch?.rgb?.let { colorValue ->
                 onFinish(Color(colorValue))
             }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetailsModels.PokemonData
 import com.samriddha.composepokedexapplication.utils.Resource
@@ -17,7 +17,7 @@ fun PokemonDetailsScreen(
     navController: NavController,
     topPadding:Dp=20.dp,
     pokemonImageSize:Dp=200.dp,
-    viewModel: PokemonDetailViewModel= hiltNavGraphViewModel()
+    viewModel: PokemonDetailViewModel= hiltViewModel()
 ) {
 
     val pokemonInfo= produceState<Resource<PokemonData>>(initialValue = Resource.Loading() ){
