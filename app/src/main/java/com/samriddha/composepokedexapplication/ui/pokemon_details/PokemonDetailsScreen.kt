@@ -1,5 +1,7 @@
 package com.samriddha.composepokedexapplication.ui.pokemon_details
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,8 +13,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +44,8 @@ import com.samriddha.composepokedexapplication.R
 import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetailsModels.PokemonData
 import com.samriddha.composepokedexapplication.data.remote.response.pokemonDetailsModels.Type
 import com.samriddha.composepokedexapplication.utils.Resource
+import com.samriddha.composepokedexapplication.utils.parseStatToAbbr
+import com.samriddha.composepokedexapplication.utils.parseStatToColor
 import com.samriddha.composepokedexapplication.utils.parseTypeToColor
 import kotlin.math.round
 
@@ -220,7 +225,7 @@ fun PokemonDetailsSection(
             pokemonHeight = pokemonInfo.height
         )
 
-
+        PokemonBaseStat(pokemonInfo = pokemonInfo)
 
     }
 
@@ -320,5 +325,105 @@ fun PokemonDetailsDataItem(
             text = "$dataValue $dataUnit",
             color = MaterialTheme.colors.onSurface
             )
+    }
+}
+
+@Composable
+fun PokemonStat(
+    statName:String,
+    statValue:Int,
+    statMaxValue:Int,
+    statColor:Color,
+    height:Dp = 28.dp,
+    animationDuration:Int=1000,
+    animDelay:Int=0
+) {
+
+    var animationPlayed by remember {
+        mutableStateOf(false)
+    }
+
+    val currentPercent = animateFloatAsState(
+        targetValue = if(animationPlayed){
+            statValue/statMaxValue.toFloat()
+        }else 0f,
+        animationSpec = tween(
+            animationDuration,
+            animDelay
+        )
+    )
+
+    LaunchedEffect(key1 = true){
+        animationPlayed=true
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height = height)
+            .clip(CircleShape)
+            .background(
+                if (isSystemInDarkTheme()) {
+                    Color(0xFF505050)
+                } else {
+                    Color.LightGray
+                }
+            )
+    ) {
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(currentPercent.value)
+                .clip(CircleShape)
+                .background(statColor)
+                .padding(horizontal = 8.dp)
+        ) {
+            Text(
+                text = statName,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = (currentPercent.value * statMaxValue).toInt().toString(),
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun PokemonBaseStat(
+    pokemonInfo:PokemonData,
+    animDelayPerItem:Int = 100
+) {
+    val maxBaseStat = remember {
+        pokemonInfo.stats.maxOf { it.base_stat }
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        Text(
+            text = "General Stats",
+            fontSize = 20.sp,
+            color = MaterialTheme.colors.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        pokemonInfo.stats.forEachIndexed { index, stat ->
+            PokemonStat(
+                statName = parseStatToAbbr(stat),
+                statValue = stat.base_stat,
+                statMaxValue =maxBaseStat ,
+                statColor = parseStatToColor(stat),
+                animDelay = index * animDelayPerItem
+                )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
