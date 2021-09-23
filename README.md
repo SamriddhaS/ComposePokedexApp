@@ -23,7 +23,7 @@ Also fetching data from the network via repository pattern.
 Go to the [Releases](https://github.com/skydoves/SamriddhaS/ComposePokedexApp/releases) to download the latest APK.
 
 
-<img src="/previews/preview.gif" align="right" width="32%"/>
+<img src="/screenshots/demo.gif" align="right" width="32%"/>
 
 ## Tech stack & Open-source libraries
 - Minimum SDK level 21
