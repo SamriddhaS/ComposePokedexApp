@@ -38,7 +38,7 @@ Go to the [Releases](https://github.com/skydoves/SamriddhaS/ComposePokedexApp/re
   - Repository pattern
 - [Retrofit2 & OkHttp3](https://github.com/square/retrofit) - construct the REST APIs and paging network data.
 - [Timber](https://github.com/JakeWharton/timber) - logging.
-
+- [Coil](https://github.com/coil-kt/coil) - An image loading library for android backed by Kotlin Coroutines.
 
 ## Architecture
 Pokedex is based on MVVM architecture and a repository pattern.
