@@ -1,10 +1,8 @@
-# ComposePokedexApp
 <h1 align="center">Compose Pokedex App</h1>
 
-<p align="center">
-  <a href="https://devlibrary.withgoogle.com/products/android/repos/skydoves-pokedex"><img alt="Google" src="https://skydoves.github.io/badges/google-devlib.svg"/></a><br>
-  <a href="https://proandroiddev.com/exploring-dagger-hilt-and-whats-main-differences-with-dagger-android-c8c54cd92f18"><img alt="Medium" src="https://skydoves.github.io/badges/Story-Medium.svg"/></a>
-  <a href="https://github.com/SamriddhaS"><img alt="Profile" src="https://skydoves.github.io/badges/skydoves.svg"/></a> 
+<a href="https://developer.android.com/jetpack/compose?gclid=CjwKCAjwy7CKBhBMEiwA0Eb7as8azqGQ4MjZmb9kXcCinKwFv1Mppge_uux0AFA-YiyYgNHaVMhrmhoCrHsQAvD_BwE&gclsrc=aw.ds"><img alt="JetpackCompose" src="https://img.shields.io/badge/Android%20Jetpack-Compose-%23ff1a66"/></a>
+<a href="https://proandroiddev.com/exploring-dagger-hilt-and-whats-main-differences-with-dagger-android-c8c54cd92f18"><img alt="Medium" src="https://skydoves.github.io/badges/Story-Medium.svg"/></a>
+  <a href="https://github.com/SamriddhaS"><img alt="Profile" src="https://img.shields.io/badge/Github-Samriddha-%2300b386"/></a> 
 </p>
 
 <p align="center">  
@@ -14,7 +12,7 @@ Also fetching data from the network via repository pattern.
 </br>
 
 <p align="center">
-<img src="/screenshots/screenshot_1.jpeg"/>
+<img src="/screenshots/screenshot_2.jpeg"/>
 </p>
 
 ## Download
